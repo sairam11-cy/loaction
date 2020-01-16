@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private static final int Request_location=1;
     Button getlocation;
+    Button sendlocation;
     TextView showlocation;
     LocationManager locationManager;
     String latitude,longitude;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},Request_location);
         showlocation=findViewById(R.id.show_location);
         getlocation=findViewById(R.id.get_location);
+        sendlocation=findViewById(R.id.send_location);
         getlocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,8 +113,21 @@ public class MainActivity extends AppCompatActivity {
                       alertDialog.show();
             }
         });
-
-
-
+        sendlocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String phonenumber = "6281165036";
+                    String message = "Latitude =" + latitude + "Longitude" + longitude;
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phonenumber, null, message, null, null);
+                    Toast.makeText(getApplicationContext(), "Message Sent successfully!",
+                            Toast.LENGTH_LONG).show();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
